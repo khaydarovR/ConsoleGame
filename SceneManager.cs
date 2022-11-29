@@ -9,12 +9,9 @@ namespace ConsoleApp1
 {
     public static class SceneManager
     {
-        static private GameScenes curent = GameScenes.Main;
         public static void Load(IScene nextScene)
         {
             nextScene.Start();
         }
-
-  
     }
 }

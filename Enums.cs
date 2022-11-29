@@ -9,6 +9,6 @@ namespace ConsoleApp1.Enums
     public enum GameScenes
     {
         MainMenu,
-        Main
+        Main,
     }
 }
