@@ -1,14 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace ConsoleApp1
+﻿namespace ConsoleApp1
 {
     public interface IScene
     {
-        public Enums.GameScenes Name { get;}
-        public void Start();
+        public Enums.GameSceneEnum Name { get; }
+        public void Start(string startMessage);
+
     }
 }

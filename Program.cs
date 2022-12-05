@@ -1,7 +1,4 @@
-﻿using ConsoleApp1.Enums;
-using ConsoleApp1.Scenes;
-using System.Numerics;
-using static System.Console;
+﻿using ConsoleApp1.Scenes;
 
 namespace ConsoleApp1;
 
@@ -12,3 +9,4 @@ class Program
         SceneManager.Load(new MainMenu());
     }
 }
+//TODO: class comand, for/LINQ, delegate

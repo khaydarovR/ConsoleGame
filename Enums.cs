@@ -1,14 +1,18 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.ComponentModel;
 
 namespace ConsoleApp1.Enums
 {
-    public enum GameScenes
+    public enum GameSceneEnum
     {
         MainMenu,
         Main,
+    }
+
+    public enum AttributeEnum
+    {
+        [Description("Голод")]
+        Hunger,
+        [Description("Энергия")]
+        Energy,
     }
 }

@@ -1,49 +1,38 @@
 ﻿using ConsoleApp1.Enums;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using static System.Console;
-using System.Threading.Tasks;   
 
 namespace ConsoleApp1.Scenes;
 
-internal class Main: Frame, IScene
+internal class Main : Frame, IScene
 {
-    GameScenes IScene.Name => GameScenes.Main;
-    private string curentComand = "";
+    GameSceneEnum IScene.Name => GameSceneEnum.Main;
     private Character character = new Character();
-    public Main()
+    public Main(): base()
     {
-            
+        Character_OnStatusUpdate();
+        AddComands();
+        character.OnStatusUpdate += Character_OnStatusUpdate;
     }
-    public void Start()
+
+    private void Character_OnStatusUpdate()
     {
         AddStatus(character.GetAttributes());
-        SetCursorPosition(mapWidth / 3, mapHight / 2);
-        WriteLine("status - полный cтатус персонажа");
+    }
+
+    public void Start(string startMessage)
+    {
+        ShowComands();
 
         while (true)
-            Handler();
-    }
-
-    private void Handler()
-    {
-        ClearArea(comandLinePosX + 2, comandLinePosY);
-        SetCursorPosition(comandLinePosX + 2, comandLinePosY);
-        curentComand = ReadLine();
-
-        switch (curentComand)
         {
-            case "status":
-                SceneManager.Load(new Main());
-                break;
-            case "exit":
-                SendMessage("Так закрой консоль дурень");
-                break;
-            default:
-                SendMessage("Нет такой команды");
-                break;
+            SetCursorPosition(comandLinePosX + 2, comandLinePosY);
+            СommandHandler(ReadLine());
         }
     }
+
+    private void AddComands()
+    {
+        ComandsList.Add(new Comand("eat", "кушать", () => character.Eat()));
+    }
+
 }
