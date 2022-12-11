@@ -19,7 +19,7 @@ namespace ConsoleApp1
             Energy = rand.Next(0, 100);
         }
 
-        public Dictionary<string, int> GetAttributes()
+        public Dictionary<string, int> GetAttributes()//string -> Enum
         {
             attributes[GetDescription(AttributeEnum.Hunger)] = Hunger;
             attributes[GetDescription(AttributeEnum.Energy)] = Energy;
@@ -47,7 +47,7 @@ namespace ConsoleApp1
             get { return energy; }
             set
             {
-                OnStatusUpdate?.Invoke();
+                //OnStatusUpdate?.Invoke();
                 if (value >= 0 && value <= 100) { energy = value; }
                 else { energy = 0; }
                 OnStatusUpdate?.Invoke();

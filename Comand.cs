@@ -20,7 +20,7 @@
             var selectedComand = ComandList.Where(c => c.Name.Contains(name));
             if (selectedComand.Count() > 0)
             {
-                throw new IndexOutOfRangeException($"{selectedComand.FirstOrDefault()} - Такая команда уже существует");
+                throw new ArgumentNullException($"{selectedComand.FirstOrDefault()} - Такая команда уже существует");
             }
 
             ComandList.Add(this);

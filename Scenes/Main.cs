@@ -1,5 +1,6 @@
 ﻿using ConsoleApp1.Enums;
 using static System.Console;
+using static ConsoleApp1.Scenes.FrameSettings;
 
 namespace ConsoleApp1.Scenes;
 

@@ -1,24 +1,20 @@
-﻿using static System.Console;
+﻿using static ConsoleApp1.Scenes.FrameSettings;
+using static System.Console;
 
 namespace ConsoleApp1.Scenes
 {
     abstract class Frame
     {
-        protected const int mapWidth = 80;
-        protected const int mapHight = 40;
+        static string? lastMessage;
+        static string? curentMessage;
 
-        protected const int comandLinePosX = mapWidth / 3;
-        protected const int comandLinePosY = mapHight - 10;
-        protected const int messagePosX = mapHight / 2;
-        protected const int messagePosY = 3;
-        protected string lastMessage;
-        protected string curentMessage;
-        private int distanceBetweenMessages = 2;
+        private Chat chat;
 
         protected List<Comand> ComandsList = new();
 
         public Frame()
         {
+            chat = Chat.getInstance();
             CreateComands();
 
             lastMessage = "                         ";
@@ -26,6 +22,9 @@ namespace ConsoleApp1.Scenes
             SetWindowSize(mapWidth, mapHight);
             SetBufferSize(mapWidth, mapHight);
             DrawBorder();
+            DrawSeparatorComandsList();
+            DrawSeparatorStatus();
+
 
             SetCursorPosition(comandLinePosX, comandLinePosY);
             Write(">>");
@@ -56,7 +55,7 @@ namespace ConsoleApp1.Scenes
             }
             if (cmd_not_found)
             {
-                SendMessage($"{newComand} не найден");
+                SendMessage($"{newComand}-не найден");
             }
 
         }
@@ -71,13 +70,13 @@ namespace ConsoleApp1.Scenes
         }
         public void SendMessage(string text)
         {
-            lastMessage = curentMessage;
-            curentMessage = text;
-            ShowMessages(lastMessage, curentMessage);
+            chat.Push(text);
+            ShowMessages(chat);
         }
 
-        protected void ClearArea(int posX, int posY, int length = mapWidth / 3)
+        protected void ClearArea(int posX, int posY)
         {
+            int length = mapWidth / 3;
             SetCursorPosition(posX, posY);
             for (int i = 0; i < length; i++)
             {
@@ -89,27 +88,30 @@ namespace ConsoleApp1.Scenes
         {
             for (var i = 0; i < ComandsList.LongCount(); i++)
             {
-                ClearArea(mapWidth / 3, mapHight / 2 + i);
-                SetCursorPosition(mapWidth / 3, mapHight / 2 + i);
+                ClearArea(comandListX, comandListY + i);
+                SetCursorPosition(comandListX, comandListY + i);
                 WriteLine(ComandsList[i].Name + $" - {ComandsList[i].Description}");
             }
         }
 
-        private void ShowMessages(string lastMes, string curentMes)
+        private void ShowMessages(Chat chat)
         {
             ClearMessageArea();
             SetCursorPosition(messagePosX, messagePosY);
-            WriteLine(lastMes);
-            SetCursorPosition(messagePosX, messagePosY + distanceBetweenMessages);
-            WriteLine(curentMes);
+            for (int i = 0; i < chat.CurrentSize; i++)
+            {
+                SetCursorPosition(messagePosX, messagePosY - distanceBetweenMessages * i);
+                WriteLine(chat.MessaagesList[i]);
+            }
         }
 
         private void ClearMessageArea()
         {
-            SetCursorPosition(messagePosX, messagePosY);
-            WriteLine(" . . . . . . . . . . . . . . ");
-            SetCursorPosition(messagePosX, messagePosY + distanceBetweenMessages);
-            WriteLine(" . . . . . . . . . . . . . . ");
+            for(int i=0; i<chat.CurrentSize; i++)
+            {
+                SetCursorPosition(messagePosX, messagePosY-i*distanceBetweenMessages);
+                WriteLine(" . . . . . . . . . . . . . . ");
+            }
         }
 
         private void DrawBorder()
@@ -124,6 +126,22 @@ namespace ConsoleApp1.Scenes
             {
                 new Pixel(0, i).Draw();
                 new Pixel(mapWidth - 1, i).Draw();
+            }
+        }
+
+        private void DrawSeparatorComandsList()
+        {
+            for (int i = 3; i < mapHight; i++)
+            {
+                new Pixel(separatorX, i).Draw();
+            }
+        }
+
+        private void DrawSeparatorStatus()
+        {
+            for (int i = 0; i < mapWidth; i++)
+            {
+                new Pixel(i, 3).Draw();
             }
         }
 

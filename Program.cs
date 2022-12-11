@@ -9,4 +9,8 @@ class Program
         SceneManager.Load(new MainMenu());
     }
 }
-//TODO: class comand, for/LINQ, delegate
+
+//TODO:
+// divide Frame class(visual/logic)
+// fix Character status
+// manage folder
