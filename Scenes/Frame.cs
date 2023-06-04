@@ -7,7 +7,7 @@ namespace ConsoleApp1.Scenes
     {
         static string? lastMessage;
         static string? curentMessage;
-
+        static Dictionary<string, int>? oldValue = null;
         private Chat chat;
 
         protected List<Comand> ComandsList = new();
@@ -41,6 +41,7 @@ namespace ConsoleApp1.Scenes
                 if (newComand == comand.Name && comand.is_accessible)
                 {
                     comand.Action();
+                    SendMessage(comand.Result);
                     return;
                 }
                 else if (newComand == comand.Name && !comand.is_accessible)
@@ -62,12 +63,40 @@ namespace ConsoleApp1.Scenes
 
         public void AddStatus(Dictionary<string, int> attributes)
         {
+            string[] change = new string[attributes.Count];
+            if (oldValue is null)
+            {
+                oldValue = attributes.ToDictionary(entry => entry.Key, entry => entry.Value);
+            }
+
+            for (int i = 0; i < change.Length; i++)
+            {
+                if (attributes.ElementAt(i).Value > oldValue.ElementAt(i).Value)
+                {
+                    change[i] = "↑";
+                    continue;
+                }
+                if (attributes.ElementAt(i).Value < oldValue.ElementAt(i).Value)
+                {
+                    change[i] = "↓";
+                    continue;
+                }
+                if(attributes.ElementAt(i).Value == oldValue.ElementAt(i).Value)
+                {
+                    change[i] = "→"; 
+                }
+            }
+
             SetCursorPosition(2, 2);
+            int j = 0;
             foreach (var atirbut in attributes)
             {
-                Write($"{atirbut.Key}: {atirbut.Value}    ");
+                Write($"{atirbut.Key}: {change[j]}{atirbut.Value}      ");
+                j++;
             }
+            oldValue = attributes.ToDictionary(entry => entry.Key, entry => entry.Value);
         }
+
         public void SendMessage(string text)
         {
             chat.Push(text);

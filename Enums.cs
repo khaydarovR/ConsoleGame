@@ -10,9 +10,11 @@ namespace ConsoleApp1.Enums
 
     public enum AttributeEnum
     {
-        [Description("Голод")]
+        [Description("Сытость")]
         Hunger,
         [Description("Энергия")]
         Energy,
+        [Description("Здоровье")]
+        Health
     }
 }

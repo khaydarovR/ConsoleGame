@@ -8,28 +8,51 @@ namespace ConsoleApp1
     {
         public delegate void StatusUpdater();
         public event StatusUpdater? OnStatusUpdate;
+
+        public event Action? OnDeth;
+
         private Dictionary<string, int> attributes = new();
         private int hunger;
         private int energy;
+        private int health;
+
+        private int oldHunger;
+        private int oldEnergy;
+        private int oldHealth;
 
         public Character()
         {
             Random rand = new Random();
-            Hunger = rand.Next(0, 100);
-            Energy = rand.Next(0, 100);
+            hunger = rand.Next(50, 80);
+            energy = rand.Next(50, 80);
+            health = rand.Next(50, 80);
+            oldHunger = hunger;
+            oldEnergy = energy;
+            oldHealth = health;
         }
+
 
         public Dictionary<string, int> GetAttributes()//string -> Enum
         {
             attributes[GetDescription(AttributeEnum.Hunger)] = Hunger;
             attributes[GetDescription(AttributeEnum.Energy)] = Energy;
+            attributes[GetDescription(AttributeEnum.Health)] = Health;
             return attributes;
         }
+
+
+        private void StateUpdate()
+        {
+            HandlerStatus();
+            OnStatusUpdate?.Invoke();
+        }
+
 
         internal void Eat(int value = 5)
         {
             Hunger += value;
-            Energy -= value / 2;
+            Energy -= value;
+            StateUpdate();
         }
 
         public int Hunger
@@ -37,9 +60,9 @@ namespace ConsoleApp1
             get { return hunger; }
             set
             {
-                if (value >= 0 && value <= 100) { hunger = value; }
-                else { hunger = 0; }
-                OnStatusUpdate?.Invoke();
+                if (value >= 100) { hunger = 100; }
+                else if (value <= 0) { hunger = 0; }
+                hunger = value;        
             }
         }
         public int Energy
@@ -47,14 +70,42 @@ namespace ConsoleApp1
             get { return energy; }
             set
             {
-                //OnStatusUpdate?.Invoke();
-                if (value >= 0 && value <= 100) { energy = value; }
-                else { energy = 0; }
-                OnStatusUpdate?.Invoke();
+                if (value >= 100) { energy = 100; }
+                else if (value <= 0) { energy = 0; }
+                energy = value;
             }
         }
 
-        static string GetDescription(Enum enumElement)
+        public int Health
+        {
+            get { return health; }
+            set
+            {
+                if(value <= 0)
+                {
+                    health = 0;
+                    Dead();
+                }
+                health = value;
+            }
+        }
+
+        private void Dead()
+        {
+            OnDeth?.Invoke();
+        }
+
+
+        private void HandlerStatus()
+        {
+            if(energy == 0 || hunger == 0)
+            {
+                Health -= 2;
+            }
+        }
+
+
+        private static string GetDescription(Enum enumElement)
         {
             Type type = enumElement.GetType();
 

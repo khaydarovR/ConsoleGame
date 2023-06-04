@@ -11,7 +11,10 @@
 
         public bool is_accessible = true;
 
-        public Comand(string name, string description, Action func) //Действие по умолчанию
+        public string Result { get; set; }
+
+
+        public Comand(string name, string description, Action func, string resultMessage = "") //Действие по умолчанию
         {
             description = description == "" ? "Не реализована" : description;
 
@@ -26,6 +29,8 @@
             ComandList.Add(this);
             is_accessible = true;
 
+
+            Result = resultMessage == "" ?  $"{name} выполена" : resultMessage;
             Name = name;
             Description = description;
             Action = func;
